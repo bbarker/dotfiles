@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cp -R .config $HOME/
+cp -R .config "$HOME/"
 
 OS="$(uname -s)"
 
@@ -13,8 +13,10 @@ case "$OS" in
         fi
         ;;
     Darwin*)
-        darwin-rebuild switch --flake $HOME/.config/nix-darwin
-        cp $HOME/.config/nix-darwin/flake.lock .config/nix-darwin/
+        NU_CONF_DIR="$HOME/Library/Application Support/nushell"
+        cp nu_config/*.nu "$NU_CONF_DIR/"
+        darwin-rebuild switch --flake "$HOME/.config/nix-darwin"
+        cp "$HOME/.config/nix-darwin/flake.lock" .config/nix-darwin/
         git status
         ;;
     *)
