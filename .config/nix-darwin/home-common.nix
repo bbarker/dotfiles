@@ -31,7 +31,7 @@
     jq
     ripgrep
     htop
-
+    shellcheck
 
     awscli2
     pgcli
