@@ -23,7 +23,7 @@ case "$OS" in
         ;;        
     *)
         echo "Unsupported operating system: $OS"
-        exit -1
+        exit 1
         ;;
 esac
 mkdir -p "$NU_CONF_DIR"
