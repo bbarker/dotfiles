@@ -4,7 +4,7 @@
 #     : (both are in nixpkgs)
 #
 
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   # Let Home Manager install and manage itself.
@@ -37,7 +37,6 @@
     awscli2
     pgcli
 
-
     coursier
     bloop
     scalafmt
@@ -47,6 +46,7 @@
 
     visualvm
 
+    unison-lang.ucm
 
     python3 # needed for sshuttle
 
