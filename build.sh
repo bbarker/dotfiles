@@ -29,9 +29,16 @@ git pull
 
 cp -R .config "$HOME/"
 
+
 OS="$(uname -s)"
 ARCH_NAME="$(uname -m)"
 HOSTNAME="$(hostname)"
+# TODO: by default, should copy host-user-home.nix, and then fall back to defaults.
+# TODO: defaults could also use a PLACEHOLDER for the $HOME directory
+case "$HOSTNAME" in
+    C02FD66VMD6M) mv "$HOME/.config/home-manager/home-czrmac.nix" "$HOME/.config/home-manager/home.nix" ;;
+    *) echo "Using default home manager config.";;
+esac
 DESIRED_SYSTEM=$(desiredSystem "${OS}" "${ARCH_NAME}")
 if sed -i='' "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix"; then
     echo "Substitution complete. The Nix system is now set to ${DESIRED_SYSTEM}."
