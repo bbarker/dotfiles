@@ -16,7 +16,7 @@
 
   outputs = { nixpkgs, home-manager, unison-lang, ... }:
     let
-      system = "x86_64-linux";
+      system = "SYSTEM_PLACEHOLDER";
 
       unisonOverlay = final: prev: {
         unison-lang = unison-lang.packages.${system};

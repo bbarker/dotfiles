@@ -33,7 +33,7 @@ OS="$(uname -s)"
 ARCH_NAME="$(uname -m)"
 HOSTNAME="$(hostname)"
 DESIRED_SYSTEM=$(desiredSystem "${OS}" "${ARCH_NAME}")
-if sed -i "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "$HOME/.config/home-manager/flake.nix"; then
+if sed -i='' "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix"; then
     echo "Substitution complete. The Nix system is now set to ${DESIRED_SYSTEM}."
 else
     echo "Error determining the desired Nix system."
@@ -70,7 +70,7 @@ if [ -d /etc/nixos ]; then
 else
     echo "This is a Linux distribution that is not NixOS."
 fi
-cp "$HOME/.config/home-manager/flake.lock" ".config/home-manager/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
+cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 
 shellcheck build.sh
 git status
