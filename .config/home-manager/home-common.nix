@@ -46,7 +46,7 @@
 
     visualvm
 
-    unison-lang.ucm
+    unison-ucm
 
     python3 # needed for sshuttle
 

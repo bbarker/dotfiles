@@ -18,15 +18,10 @@
     let
       system = "SYSTEM_PLACEHOLDER";
 
-      unisonOverlay = final: prev: {
-        unison-lang = unison-lang.packages.${system};
-      };
-
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ unisonOverlay ];
+        overlays = [ unison-lang.overlay ];
       };
-
       
     in {
       homeConfigurations."bbarker" = home-manager.lib.homeManagerConfiguration {
