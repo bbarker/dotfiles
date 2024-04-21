@@ -17,7 +17,7 @@
   # ];
 
   home.packages = with pkgs; [
-    alacritty
+    # alacritty # nixGL issue on non-NixOS
     tmux
     helix
     nushell
