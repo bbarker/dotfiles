@@ -33,12 +33,19 @@ cp -R .config "$HOME/"
 OS="$(uname -s)"
 ARCH_NAME="$(uname -m)"
 HOSTNAME="$(hostname)"
-# TODO: by default, should copy host-user-home.nix, and then fall back to defaults.
-# TODO: defaults could also use a PLACEHOLDER for the $HOME directory
-case "$HOSTNAME" in
-    C02FD66VMD6M) mv "$HOME/.config/home-manager/home-czrmac.nix" "$HOME/.config/home-manager/home.nix" ;;
-    *) echo "Using default home manager config.";;
-esac
+HOME_NIX_FILE="home-$ARCH_NAME-$OS-$HOSTNAME.nix"
+HOME_NIX_FILE_PATH="$HOME/.config/home-manager/$HOME_NIX_FILE"
+echo "Looking for $HOME_NIX_FILE_PATH"
+if [ -f "$HOME_NIX_FILE_PATH" ]; then
+    echo "Found $HOME_NIX_FILE"
+    mv "$HOME_NIX_FILE_PATH" "$HOME/.config/home-manager/home.nix"
+else
+    echo "Custom config not found; using default home.nix."
+fi
+# case "$HOSTNAME" in
+#     C02FD66VMD6M) mv "$HOME/.config/home-manager/home-czrmac.nix" "$HOME/.config/home-manager/home.nix" ;;
+#     *) echo "Using default home manager config.";;
+# esac
 DESIRED_SYSTEM=$(desiredSystem "${OS}" "${ARCH_NAME}")
 if sed -i='' "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix"; then
     echo "Substitution complete. The Nix system is now set to ${DESIRED_SYSTEM}."
