@@ -4,7 +4,7 @@
 #     : (both are in nixpkgs)
 #
 
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 {
   # Let Home Manager install and manage itself.
@@ -17,6 +17,7 @@
   # ];
 
   home.packages = with pkgs; [
+    # alacritty # nixGL issue on non-NixOS
     tmux
     helix
     nushell
@@ -36,7 +37,6 @@
     awscli2
     pgcli
 
-
     coursier
     bloop
     scalafmt
@@ -46,6 +46,7 @@
 
     visualvm
 
+    unison-ucm
 
     python3 # needed for sshuttle
 

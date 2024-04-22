@@ -8,12 +8,21 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    unison-lang = {
+      url = "github:ceedubs/unison-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, unison-lang, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      system = "SYSTEM_PLACEHOLDER";
+
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ unison-lang.overlay ];
+      };
+      
     in {
       homeConfigurations."bbarker" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
