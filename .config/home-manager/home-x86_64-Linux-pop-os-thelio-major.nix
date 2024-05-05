@@ -12,6 +12,10 @@ in
   # paths it should manage.
   home.username = "bbarker";
   home.homeDirectory = "/home/bbarker";
-  home.sessionVariables = common.home.sessionVariables;
+  home.sessionVariables = common.home.sessionVariables // {
+    # Not sure how much this helps yet - trying to get XDG working well
+    XDG_CURRENT_DESKTOP = "pop:GNOME";
+    XDG_MENU_PREFIX = "gnome-";
+  };
   programs = common.programs;
- }
+}

@@ -8,4 +8,6 @@
   # paths it should manage.
   home.username = "bbarker";
   home.homeDirectory = "/Users/bbarker";
+  home.sessionVariables = common.home.sessionVariables;
+  programs = common.programs;
 }
