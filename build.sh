@@ -80,9 +80,9 @@ else
     nix-shell '<home-manager>' -A install
 fi
 
-cd "$HOME/.config/home-manager/" || echo "couldn't cd to home-manager config dir"; exit
+cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit;}
 nix flake update
-cd $REPO_DIR || echo "couldn't cd to REPO_DIR"; exit
+cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit; }
 home-manager switch
 
 if [ -d /etc/nixos ]; then
