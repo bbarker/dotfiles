@@ -1,7 +1,10 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
+let
+  common = import ./home-common.nix { inherit inputs config pkgs; };
+in
 {
-  imports = [ ./home-common.nix ];
+  imports = [ common ];
 
 
   # Home Manager needs a bit of information about you and the

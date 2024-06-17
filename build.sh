@@ -85,11 +85,6 @@ nix flake update
 cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit; }
 home-manager switch
 
-if [ -d /etc/nixos ]; then
-    echo "This is NixOS."
-else
-    echo "This is a Linux distribution that is not NixOS."
-fi
 cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 
 shellcheck build.sh

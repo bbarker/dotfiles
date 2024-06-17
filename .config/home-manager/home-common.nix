@@ -52,6 +52,9 @@
 
     # must be last
     zsh-syntax-highlighting
+
+    # work
+    kubectl
   ];
 
   home.sessionVariables = {
