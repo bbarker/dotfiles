@@ -6,7 +6,9 @@ let
 in
 {
   imports = [ common ];
-  home.packages = x11home.packages ++ common.home.packages;
+  home.packages = x11home.packages ++ common.home.packages ++ [
+    tlaplusToolbox
+  ];
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
