@@ -7,7 +7,7 @@ in
 {
   imports = [ common ];
   home.packages = x11home.packages ++ common.home.packages ++ [
-    tlaplusToolbox
+    pkgs.tlaplusToolbox
   ];
 
   # Home Manager needs a bit of information about you and the
