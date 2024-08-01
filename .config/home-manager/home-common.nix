@@ -21,6 +21,7 @@
     tmux
     helix
     nushell
+    # ai-sh
 
     git
     gitAndTools.gh
@@ -30,7 +31,7 @@
     fzf
     httpie
     jq
-    ripgrep
+    ripgrep-all
     htop
     shellcheck
 

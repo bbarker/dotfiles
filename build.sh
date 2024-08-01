@@ -54,7 +54,6 @@ else
     echo "Error determining the desired Nix system."
 fi
 
-NIX_VERSION_PLACEHOLDER
 DESIRED_VERSION="24.05"
 if sed -i='' "s/NIX_VERSION_PLACEHOLDER/${DESIRED_VERSION}/g" "${HOME}/.config/home-manager/flake.nix"; then
     echo "Substitution complete. The Nix version is now set to ${DESIRED_VERSION}."
