@@ -104,6 +104,9 @@
   };
 
   programs.bash.enable = true;
+  programs.bash.profileExtra = ''
+    source "$HOME/.cargo/env"
+  '';
   programs.zsh.enable = true;
 
   # This value determines the Home Manager release that your

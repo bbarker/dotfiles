@@ -36,7 +36,7 @@
 
     #   cargoSha256 = "sha256-nnOUKUJZgTXQKlNMmMnXxZKkANLRXwzVWKzKZPwxsxc=";
 
-    #   nativeBuildInputs = [ pkgs.pkg-config ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
     #   buildInputs = [ pkgs.openssl ];
 
     #   # If there are any features you want to enable, add them here
