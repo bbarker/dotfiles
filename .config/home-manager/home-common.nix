@@ -56,6 +56,9 @@
 
     # work
     kubectl
+
+    # For tiling WMs
+    haskellPackages.yeganesh
   ];
 
   home.sessionVariables = {
