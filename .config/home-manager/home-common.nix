@@ -17,6 +17,8 @@
   # ];
 
   home.packages = with pkgs; [
+    appimage-run
+    
     # alacritty # nixGL issue on non-NixOS
     tmux
     helix
@@ -28,6 +30,7 @@
     tig
     nodejs
 
+    dogedns
     fzf
     httpie
     jq
