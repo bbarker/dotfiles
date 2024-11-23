@@ -64,6 +64,15 @@
     haskellPackages.yeganesh
   ];
 
+  home.file.".local/bin" = {
+    source = ./scripts;
+    recursive = true;
+    executable = true;
+  };
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
+  
   home.sessionVariables = {
     EDITOR = "hx";
   };

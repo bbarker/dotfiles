@@ -7,12 +7,13 @@ let
 in
 {
   imports = [ common ];
-  home.packages = waylandHome.packages ++ common.home.packages ++ nixosHome.packages;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "bbarker";
-  home.homeDirectory = "/home/bbarker";
-  home.sessionVariables = common.home.sessionVariables;
+  home = common.home // {
+    packages = waylandHome.packages ++ common.home.packages ++ nixosHome.packages;
+    username = "bbarker";
+    homeDirectory = "/home/bbarker";
+  };
   programs = common.programs;
 }

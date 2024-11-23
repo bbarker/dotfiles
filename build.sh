@@ -30,7 +30,6 @@ git pull
 
 cp -R .config "$HOME/"
 
-
 OS="$(uname -s)"
 ARCH_NAME="$(uname -m)"
 HOSTNAME="$(hostname)"

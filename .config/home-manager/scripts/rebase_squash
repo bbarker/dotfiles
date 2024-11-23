@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# Function to check if we're in a Git repository
+check_git_repo() {
+    if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+        echo "Error: Not in a Git repository."
+        exit 1
+    fi
+}
+
+# Function to create a backup branch
+create_backup() {
+    local current_branch
+    current_branch=$(git branch --show-current)
+    local backup_branch
+    backup_branch="${current_branch}-backup-$(date +%Y%m%d%H%M%S)"
+    git branch "$backup_branch"
+    echo "Backup branch created: $backup_branch"
+}
+
+incremental_squash() {
+    local commits_to_squash=$1
+    local temp_file
+    temp_file=$(mktemp)
+    
+    # Generate the rebase todo list without exec lines
+    git log --reverse --format="%H %s" HEAD~"$commits_to_squash"..HEAD > "$temp_file"
+
+    # Modify the todo list to squash all but the first commit
+    sed -i '1s/^/pick /; 2,$s/^/squash /' "$temp_file"
+
+    # Perform the rebase using the modified todo list
+    GIT_SEQUENCE_EDITOR="cat $temp_file >" git rebase -i HEAD~"$commits_to_squash"
+
+
+    # Check if rebase was successful
+    if ! rm "$temp_file"; then
+        echo "Rebase encountered conflicts. Please resolve them and run 'git rebase --continue'."
+        echo "After resolving conflicts, run this script again."
+        exit 1
+    fi
+}
+
+
+# Main script
+check_git_repo
+create_backup
+
+while true; do
+    read -rp "Enter the number of commits to squash (or 'q' to quit): " input
+    
+    if [ "$input" = "q" ]; then
+        break
+    fi
+    
+    if ! [[ "$input" =~ ^[0-9]+$ ]]; then
+        echo "Please enter a valid number."
+        continue
+    fi
+    
+    incremental_squash "$input"
+    
+    read -rp "Run tests and verify changes. Press Enter to continue, or 'q' to quit: " verify
+    if [ "$verify" = "q" ]; then
+        break
+    fi
+    
+    git push --force-with-lease
+    break
+
+done
+
+echo "Incremental squashing complete. Please review your Git history."

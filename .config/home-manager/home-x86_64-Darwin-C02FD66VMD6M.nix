@@ -9,8 +9,10 @@ in
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "bbarker";
-  home.homeDirectory = "/Users/bbarker";
-  home.sessionVariables = common.home.sessionVariables;
+  home = common.home // {
+    packages = common.home.packages;
+    username = "bbarker";
+    home.homeDirectory = "/Users/bbarker";
+  };
   programs = common.programs;
 }
