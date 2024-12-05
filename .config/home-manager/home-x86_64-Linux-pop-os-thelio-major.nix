@@ -19,6 +19,7 @@ in
       # Not sure how much this helps yet - trying to get XDG working well
       XDG_CURRENT_DESKTOP = "pop:GNOME";
       XDG_MENU_PREFIX = "gnome-";
+      DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus";
     };
   };
   programs = common.programs;
