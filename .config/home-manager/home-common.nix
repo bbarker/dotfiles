@@ -27,6 +27,7 @@
 
     git
     gitAndTools.gh
+    openssh
     tig
     nodejs
 
