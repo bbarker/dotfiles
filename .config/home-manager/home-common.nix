@@ -22,6 +22,7 @@
     # alacritty # nixGL issue on non-NixOS
     tmux
     helix
+    bashInteractive
     nushell
     # ai-sh
 
@@ -55,14 +56,14 @@
 
     python3 # needed for sshuttle
 
-    # must be last
-    zsh-syntax-highlighting
-
     # work
     kubectl
 
     # For tiling WMs
     haskellPackages.yeganesh
+
+    # must be last
+    zsh-syntax-highlighting
   ];
 
   home.file.".local/bin" = {
