@@ -6,6 +6,16 @@
 
 { inputs, config, pkgs, ... }:
 
+let
+  pkgsUntable = import (fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/905537956250bd4c0d7de778b8a8ee9af6daac58.tar.gz"; # 03/06/25
+    sha256 = "sha256:0indqp22d7w8zl2wfnzq0id1l697xc7rsxpf2z58hr28inra1r9v";
+  }) {
+    system = "SYSTEM_PLACEHOLDER";
+    config.allowUnfree = true;    
+  };
+in
+
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -25,12 +35,14 @@
     bashInteractive
     nushell
     # ai-sh
+    pkgsUntable.claude-code
 
     git
     gitAndTools.gh
     openssh
     tig
     nodejs
+    deno
 
     dogedns
     fzf

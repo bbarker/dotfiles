@@ -47,7 +47,7 @@ fi
 #     *) echo "Using default home manager config.";;
 # esac
 DESIRED_SYSTEM=$(desiredSystem "${OS}" "${ARCH_NAME}")
-if sed -i='' "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix"; then
+if sed -i='' "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix" "${HOME}/.config/home-manager/home-common.nix"; then
     echo "Substitution complete. The Nix system is now set to ${DESIRED_SYSTEM}."
 else
     echo "Error determining the desired Nix system."
