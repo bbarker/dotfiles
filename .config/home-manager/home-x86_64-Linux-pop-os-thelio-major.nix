@@ -2,6 +2,7 @@
 
 let
   common = import ./home-common.nix { inherit inputs config pkgs; };
+  linuxCommon = import ./linux.nix { inherit inputs config pkgs; };
   x11home = import ./x11.nix { inherit inputs config pkgs; };
 in
 {
@@ -10,7 +11,7 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = common.home // {
-    packages = x11home.packages ++ common.home.packages ++ [
+    packages = linuxCommon.packages ++ x11home.packages ++ common.home.packages ++ [
       pkgs.tlaplusToolbox
     ];
     username = "bbarker";
@@ -21,6 +22,6 @@ in
       XDG_MENU_PREFIX = "gnome-";
       DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus";
     };
+    stateVersion = "24.05";
   };
-  programs = common.programs;
 }

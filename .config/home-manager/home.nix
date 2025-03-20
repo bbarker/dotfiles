@@ -14,5 +14,4 @@ in
     username = "bbarker";
     homeDirectory = "/home/bbarker";
   };
-  programs = common.programs;
  }

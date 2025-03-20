@@ -30,8 +30,20 @@ git pull
 
 cp -R .config "$HOME/"
 
+NIX_CONF_FILE="$HOME/.config/nix/nix.conf"
+# For new nix installations
+if [ -f "$NIX_CONF_FILE" ]; then
+    echo "Found nix.conf"
+else
+    echo "nix.conf not found; creating default."
+    cat "experimental-features = nix-command flakes configurable-impure-env" > "$NIX_CONF_FILE"
+fi
+
 OS="$(uname -s)"
 ARCH_NAME="$(uname -m)"
+if [ "$ARCH_NAME" = "arm64" ] && [ "$OS" = "Darwin" ]; then
+    ARCH_NAME="aarch64"
+fi
 HOSTNAME="$(hostname)"
 HOME_NIX_FILE="home-$ARCH_NAME-$OS-$HOSTNAME.nix"
 HOME_NIX_FILE_PATH="$HOME/.config/home-manager/$HOME_NIX_FILE"

@@ -12,7 +12,10 @@ in
   home = common.home // {
     packages = common.home.packages;
     username = "bbarker";
-    home.homeDirectory = "/Users/bbarker";
-    stateVersion = "24.05";
+    # home = "/Users/bbarker";
+    homeDirectory = "/Users/bbarker";
+    stateVersion = "24.11";
   };
+  programs = common.programs;
+
 }

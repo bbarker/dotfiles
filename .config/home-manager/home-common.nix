@@ -27,7 +27,6 @@ in
   # ];
 
   home.packages = with pkgs; [
-    appimage-run
     
     # alacritty # nixGL issue on non-NixOS
     tmux
@@ -143,5 +142,7 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "24.05";
+  #
+  # This should be set in individual machine configs
+  # home.stateVersion = "24.05";
 }
