@@ -40,7 +40,7 @@ in
     gitAndTools.gh
     openssh
     tig
-    nodejs
+    #nodejs
     deno
 
     dogedns
