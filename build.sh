@@ -105,5 +105,9 @@ home-manager switch
 
 cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 
+# Install helix grammars
+hx --grammar fetch
+hx --grammar build
+
 shellcheck build.sh
 git status

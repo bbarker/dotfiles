@@ -1,0 +1,45 @@
+[[language]]
+name = "rust"
+auto-format = true
+#
+[language-server.rust-analyzer]
+config = { checkOnSave = { command = "clippy" }, cargo = { allFeatures = true }, procMacro = { enable = true }}
+
+# This seems to interfere with the default grammar and gives the error
+# on fetch: "data did not match any variant of untagged enum GrammarSource"
+# [[grammar]]
+# name = "rust"
+# source = { git = "https://github.com/tree-sitter/tree-sitter-rust" }
+
+[[language]]
+name = "cobweb"
+scope = "source.cobweb"
+file-types = [ "cob", "cobweb" ]
+auto-format = true
+roots = []
+#
+[[grammar]]
+name = "cobweb"
+source = { git = "https://github.com/FabricSoul/tree-sitter-cobweb", rev = "main" }
+
+[[language]]
+name = "scala"
+auto-format = true
+#language-servers = {metals.ammoniteJvmProperties = ["-Xmx1G"]}
+
+[language-server.ucm]
+command = "nc" # or 'ncat' or 'netcat'
+args = ["localhost", "5757"]
+
+[[language]]
+name = "unison"
+scope = "source.unison"
+injection-regex = "unison"
+file-types = ["u"]
+shebangs = []
+roots = []
+auto-format = false
+comment-token = "--"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [ "ucm" ]
+
