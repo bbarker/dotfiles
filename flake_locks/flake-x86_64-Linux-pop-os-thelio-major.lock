@@ -782,11 +782,11 @@
         "unison": "unison"
       },
       "locked": {
-        "lastModified": 1747926854,
-        "narHash": "sha256-FGVfjxEUc2oyyloqC7WMs+a1e8W+qBNI9M1KwXmxyQI=",
+        "lastModified": 1749004598,
+        "narHash": "sha256-EFi1hL7ZMYcG9LHAt2PqZhM2TRBnB64wpJDWjIn75Tk=",
         "owner": "ceedubs",
         "repo": "unison-nix",
-        "rev": "6cb941ba5cc703716c4e80176187189437e37696",
+        "rev": "4ff25c55bc5ec6d1f319dc9ab4d06dbfb47050b3",
         "type": "github"
       },
       "original": {
