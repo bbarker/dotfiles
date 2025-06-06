@@ -112,6 +112,12 @@ hx --grammar build
 COB_QUERY_DIR="$HOME/.config/helix/runtime/queries/cobweb"
 mkdir -p "$COB_QUERY_DIR"
 cp "$HOME/.config/helix/runtime/grammars/sources/cobweb/queries/"* "$COB_QUERY_DIR"
+#
+# TODO/Note: Currently using a source build of helix as a temporary workaround;
+#          : I need to be sure to remember to set HELIX_RUNTIME, see
+#          : https://docs.helix-editor.com/building-from-source.html
+# 
+
 
 shellcheck build.sh
 git status
