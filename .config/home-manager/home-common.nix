@@ -35,12 +35,14 @@ in
     nushell
     # ai-sh
     pkgsUntable.claude-code
+    # to use alternative claude-code versions
+    # first do `npm set prefix ~/.npm-global`
+    nodejs
 
     git
     gitAndTools.gh
     openssh
     tig
-    #nodejs
     deno
 
     dogedns
