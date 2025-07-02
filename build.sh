@@ -107,7 +107,7 @@ cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HO
 
 # Install helix grammars
 hx --grammar fetch
-hx --grammar build
+nix-shell -p clang --run "hx --grammar build"
 #
 COB_QUERY_DIR="$HOME/.config/helix/runtime/queries/cobweb"
 mkdir -p "$COB_QUERY_DIR"
