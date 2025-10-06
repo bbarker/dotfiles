@@ -364,11 +364,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1753592768,
-        "narHash": "sha256-oV695RvbAE4+R9pcsT9shmp6zE/+IZe6evHWX63f2Qg=",
+        "lastModified": 1758463745,
+        "narHash": "sha256-uhzsV0Q0I9j2y/rfweWeGif5AWe0MGrgZ/3TjpDYdGA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "fc3add429f21450359369af74c2375cb34a2d204",
+        "rev": "3b955f5f0a942f9f60cdc9cacb7844335d0f21c3",
         "type": "github"
       },
       "original": {
@@ -497,11 +497,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1754937576,
-        "narHash": "sha256-3sWA5WJybUE16kIMZ3+uxcxKZY/JRR4DFBqLdSLBo7w=",
+        "lastModified": 1759580034,
+        "narHash": "sha256-YWo57PL7mGZU7D4WeKFMiW4ex/O6ZolUS6UNBHTZfkI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "ddae11e58c0c345bf66efbddbf2192ed0e58f896",
+        "rev": "3bcc93c5f7a4b30335d31f21e2f1281cba68c318",
         "type": "github"
       },
       "original": {
@@ -758,17 +758,17 @@
         "nixpkgs-release": "nixpkgs-release"
       },
       "locked": {
-        "lastModified": 1752025139,
-        "narHash": "sha256-1sS5/fSOx26loMBPEjCQLhMMwS4x8uuZOprGsh+xmT0=",
+        "lastModified": 1758162287,
+        "narHash": "sha256-S4C0bXhgx2hN7sDhkSJUHJu/a0yHpu5EPA22UC5we+I=",
         "owner": "unisonweb",
         "repo": "unison",
-        "rev": "5e7bd7c4bfe6a1c2ddbcd3d35b7281ef7b1fa10e",
+        "rev": "2824fce433fe13855ab8fcbf2c2ebbe0c9a5ab4c",
         "type": "github"
       },
       "original": {
         "owner": "unisonweb",
+        "ref": "release/0.5.48",
         "repo": "unison",
-        "rev": "5e7bd7c4bfe6a1c2ddbcd3d35b7281ef7b1fa10e",
         "type": "github"
       }
     },
@@ -782,11 +782,11 @@
         "unison": "unison"
       },
       "locked": {
-        "lastModified": 1754662121,
-        "narHash": "sha256-OJbZrXNGNeTPno5QHbCll9VkOOmk5bm+ZbRbo78uX/U=",
+        "lastModified": 1758814146,
+        "narHash": "sha256-ELtlAMfkifw/xepbo8pgGraqqepNxVYWiAzTEBhD+P0=",
         "owner": "ceedubs",
         "repo": "unison-nix",
-        "rev": "2cbb512d8d20238360a5acbe922738f49886c006",
+        "rev": "c2a06d9bf3cbc8bb6dfb039d1519ec6499f106e9",
         "type": "github"
       },
       "original": {
