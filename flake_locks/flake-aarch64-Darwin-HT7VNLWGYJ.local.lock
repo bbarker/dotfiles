@@ -364,16 +364,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1745557122,
-        "narHash": "sha256-eqSo9ugzsqhFgaDFYUZj943nurlX4L6f+AW0skJ4W+M=",
+        "lastModified": 1763992789,
+        "narHash": "sha256-WHkdBlw6oyxXIra/vQPYLtqY+3G8dUVZM8bEXk0t8x4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "dd26f75fb4ec1c731d4b1396eaf4439ce40a91c1",
+        "rev": "44831a7eaba4360fb81f2acc5ea6de5fde90aaa3",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-24.11",
+        "ref": "release-25.05",
         "repo": "home-manager",
         "type": "github"
       }
@@ -386,11 +386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1739757849,
-        "narHash": "sha256-Gs076ot1YuAAsYVcyidLKUMIc4ooOaRGO0PqTY7sBzA=",
+        "lastModified": 1747688870,
+        "narHash": "sha256-ypL9WAZfmJr5V70jEVzqGjjQzF0uCkz+AFQF7n9NmNc=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "9d3d080aec2a35e05a15cedd281c2384767c2cfe",
+        "rev": "d5f1f641b289553927b3801580598d200a501863",
         "type": "github"
       },
       "original": {
@@ -497,16 +497,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1745487689,
-        "narHash": "sha256-FQoi3R0NjQeBAsEOo49b5tbDPcJSMWc3QhhaIi9eddw=",
+        "lastModified": 1764939437,
+        "narHash": "sha256-4TLFHUwXraw9Df5mXC/vCrJgb50CRr3CzUzF0Mn3CII=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5630cf13cceac06cefe9fc607e8dfa8fb342dde3",
+        "rev": "00d2457e2f608b4be6fe8b470b0a36816324b0ae",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-24.11",
+        "ref": "nixos-25.05",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -749,26 +749,32 @@
           "flake-utils"
         ],
         "haskellNix": "haskellNix",
-        "nixpkgs-haskellNix": [
+        "nixpkgs": [
           "unison-lang",
           "unison",
           "haskellNix",
           "nixpkgs-unstable"
         ],
-        "nixpkgs-release": "nixpkgs-release"
+        "nixpkgs-release": "nixpkgs-release",
+        "systems": [
+          "unison-lang",
+          "unison",
+          "flake-utils",
+          "systems"
+        ]
       },
       "locked": {
-        "lastModified": 1743131295,
-        "narHash": "sha256-/aBYP+4pgjJGJHB8BZRexsDZbxaouuSSdG9Gl3M97aw=",
+        "lastModified": 1764814985,
+        "narHash": "sha256-nUKs+8ZdYiTG6jgwMHeohgL/32RrS+NL4WHNpUp775k=",
         "owner": "unisonweb",
         "repo": "unison",
-        "rev": "51d6d80ead4325a5d491a795a413b82d4af6d35a",
+        "rev": "dea1d0035c3dc76c7ef8330a11b1f5e273331510",
         "type": "github"
       },
       "original": {
         "owner": "unisonweb",
-        "ref": "release/0.5.37",
         "repo": "unison",
+        "rev": "dea1d0035c3dc76c7ef8330a11b1f5e273331510",
         "type": "github"
       }
     },
@@ -782,11 +788,11 @@
         "unison": "unison"
       },
       "locked": {
-        "lastModified": 1743359859,
-        "narHash": "sha256-GxV1L0IlIk47Dtw5CQMUvxtMeAjfq2SJRIq873S98Gc=",
+        "lastModified": 1764880271,
+        "narHash": "sha256-VDM2W5YFwd4N1Uz+XF5jPnGcL3xh3lmQpAzJqTMrTFc=",
         "owner": "ceedubs",
         "repo": "unison-nix",
-        "rev": "238898b04d193cd339a63c54c186da89a0f3867d",
+        "rev": "eda7404e3ea832f53ec445fd8cbb2b248e9e928d",
         "type": "github"
       },
       "original": {
