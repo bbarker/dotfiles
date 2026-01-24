@@ -13,6 +13,7 @@ in
   home = common.home // {
     packages = linuxCommon.packages ++ x11home.packages ++ common.home.packages ++ [
       pkgs.tlaplusToolbox
+      pkgs.ollama-cuda
     ];
     username = "bbarker";
     homeDirectory = "/home/bbarker";

@@ -22,6 +22,7 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [ unison-lang.overlay ];
+        config.allowUnfree = true;
       };
     # ai-sh = pkgs.rustPlatform.buildRustPackage rec {
     #   pname = "ai-sh";
