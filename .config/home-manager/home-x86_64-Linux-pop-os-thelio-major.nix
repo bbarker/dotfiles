@@ -4,6 +4,13 @@ let
   common = import ./home-common.nix { inherit inputs config pkgs; };
   linuxCommon = import ./linux.nix { inherit inputs config pkgs; };
   x11home = import ./x11.nix { inherit inputs config pkgs; };
+  pkgsUnstable = import (fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/523257564973361cc3e55e3df3e77e68c20b0b80.tar.gz"; # 01/24/26
+    sha256 = "sha256:04pg38yzy28kkrxgn4hjgdzpr3zlxzqi2g7k2gi8fkwgkb3a58xi";
+  }) {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
 in
 {
   imports = [ common ];
@@ -13,7 +20,7 @@ in
   home = common.home // {
     packages = linuxCommon.packages ++ x11home.packages ++ common.home.packages ++ [
       pkgs.tlaplusToolbox
-      pkgs.ollama-cuda
+      pkgsUnstable.ollama-cuda
     ];
     username = "bbarker";
     homeDirectory = "/home/bbarker";
