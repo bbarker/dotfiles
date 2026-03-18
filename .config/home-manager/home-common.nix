@@ -58,6 +58,7 @@ in
 
     coursier
     bloop
+    metals
     scalafmt
     sbt
     scala
