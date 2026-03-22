@@ -404,16 +404,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1747688870,
-        "narHash": "sha256-ypL9WAZfmJr5V70jEVzqGjjQzF0uCkz+AFQF7n9NmNc=",
+        "lastModified": 1770260404,
+        "narHash": "sha256-3iVX1+7YUIt23hBx1WZsUllhbmP2EnXrV8tCRbLxHc8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d5f1f641b289553927b3801580598d200a501863",
+        "rev": "0d782ee42c86b196acff08acfbf41bb7d13eed5b",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-24.11",
+        "ref": "release-25.11",
         "repo": "home-manager",
         "type": "github"
       }
@@ -819,16 +819,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1767645519,
-        "narHash": "sha256-b31ZaEk8CAFoR6FjZxa4KGUPfaPpUASIAu3HWprW2Eo=",
+        "lastModified": 1769618968,
+        "narHash": "sha256-0Y5pNjULsIJ6r3VaMYLrLT/iXpmZvQLX9q1C0siED7o=",
         "owner": "unisonweb",
         "repo": "unison",
-        "rev": "23b831f6e3736d54a0516940dec3f56d143b9015",
+        "rev": "4ff37ee6a0bd0afbea7aedbe04eed76e79fcba8c",
         "type": "github"
       },
       "original": {
         "owner": "unisonweb",
-        "ref": "release/1.0.2",
+        "ref": "release/1.1.0",
         "repo": "unison",
         "type": "github"
       }
@@ -843,11 +843,11 @@
         "unison": "unison"
       },
       "locked": {
-        "lastModified": 1767721893,
-        "narHash": "sha256-J6bKsncxt0POgAcuPIcuOcEnvCide1q2M5wZ6eqQDEo=",
+        "lastModified": 1770661811,
+        "narHash": "sha256-YWd1clM9A4kkkFvVSzVBIfGf09sZzNqbbt9hDqx+izs=",
         "owner": "ceedubs",
         "repo": "unison-nix",
-        "rev": "c87b2e2a375472a05dde2d7fe6ecb6870d15e22f",
+        "rev": "451afabefe1fbd36f081c641cd112db1fcbcb622",
         "type": "github"
       },
       "original": {
