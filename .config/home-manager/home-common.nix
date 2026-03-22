@@ -135,6 +135,11 @@ in
   programs.bash.profileExtra = ''
     source "$HOME/.cargo/env"
   '';
+  programs.bash.initExtra = ''
+    # Source session vars for non-login shells (e.g., terminal emulators)
+    [[ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]] && \
+      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+  '';
   programs.zsh.enable = true;
 
   # This value determines the Home Manager release that your

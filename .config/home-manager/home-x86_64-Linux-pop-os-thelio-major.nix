@@ -1,8 +1,8 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, ... }@args:
 
 let
   common = import ./home-common.nix { inherit inputs config pkgs; };
-  linuxCommon = import ./linux.nix { inherit inputs config pkgs; };
+  linuxCommon = import ./linux.nix args;
   x11home = import ./x11.nix { inherit inputs config pkgs; };
   pkgsUnstable = import (fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/523257564973361cc3e55e3df3e77e68c20b0b80.tar.gz"; # 01/24/26
@@ -20,7 +20,8 @@ in
   home = common.home // {
     packages = linuxCommon.packages ++ x11home.packages ++ common.home.packages ++ [
       pkgs.tlaplusToolbox
-      pkgsUnstable.ollama-cuda
+      # Wrap ollama-cuda with nixGL for GPU access (requires: home-manager switch --impure)
+      (linuxCommon.wrapWithNixGL pkgsUnstable.ollama-cuda)
     ];
     username = "bbarker";
     homeDirectory = "/home/bbarker";

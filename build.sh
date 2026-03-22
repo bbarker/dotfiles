@@ -101,7 +101,8 @@ fi
 cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit;}
 nix flake update
 cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit; }
-home-manager switch
+# --impure required for nixGL (GPU support on non-NixOS)
+home-manager switch --impure
 
 cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 

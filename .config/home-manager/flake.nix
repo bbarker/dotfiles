@@ -13,15 +13,23 @@
       url = "github:ceedubs/unison-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nixGL for GPU support on non-NixOS systems (Pop!_OS, Ubuntu, etc.)
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, unison-lang, ... }:
+  outputs = { nixpkgs, home-manager, unison-lang, nixgl, ... }:
     let
       system = "SYSTEM_PLACEHOLDER";
+      isLinux = builtins.match ".*linux.*" system != null;
+      isImpure = builtins.hasAttr "currentTime" builtins;
 
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ unison-lang.overlay ];
+        overlays = [ unison-lang.overlay ]
+          ++ (if (isLinux && isImpure) then [ nixgl.overlays.default ] else []);
         config.allowUnfree = true;
       };
     # ai-sh = pkgs.rustPlatform.buildRustPackage rec {
@@ -58,8 +66,8 @@
         # the path to your home.nix.
         modules = [ ./home.nix ];
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
+        # nixGL is available via pkgs overlay when on Linux+impure
+        # extraSpecialArgs = { };
       };
     };
 }
