@@ -120,5 +120,16 @@ cp "$HOME/.config/helix/runtime/grammars/sources/cobweb/queries/"* "$COB_QUERY_D
 # 
 
 
+# Deploy Zed config: merge base settings with machine-local overrides
+ZED_DEST="$HOME/.config/zed"
+mkdir -p "$ZED_DEST"
+cp -R .config/zed/. "$ZED_DEST/"
+ZED_BASE="$ZED_DEST/settings.json"
+ZED_LOCAL="$ZED_DEST/settings.local.json"
+if [ -f "$ZED_LOCAL" ]; then
+    jq -s '.[0] * .[1]' "$ZED_BASE" "$ZED_LOCAL" > "$ZED_DEST/settings.json.tmp"
+    mv "$ZED_DEST/settings.json.tmp" "$ZED_BASE"
+fi
+
 shellcheck build.sh
 git status

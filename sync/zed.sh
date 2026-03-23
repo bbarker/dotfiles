@@ -5,13 +5,13 @@ DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 ZED_SRC="$HOME/.config/zed"
 ZED_DEST="$DOTFILES_DIR/.config/zed"
 
-cp -R "$ZED_SRC/" "$ZED_DEST/"
+mkdir -p "$ZED_DEST"
 
-# Strip machine-specific agent_servers, save as settings.base.json, remove raw copy
-jq 'del(.agent_servers)' "$ZED_DEST/settings.json" > "$ZED_DEST/settings.base.json"
-rm "$ZED_DEST/settings.json"
+# Copy all zed config except sensitive/machine-specific files
+rsync -a --exclude='settings.local.json' --exclude='development_credentials' "$ZED_SRC/" "$ZED_DEST/"
 
-# Remove sensitive files
-rm -f "$ZED_DEST/development_credentials"
+# Strip agent_servers (and any other machine-specific keys) from settings.json
+jq 'del(.agent_servers)' "$ZED_DEST/settings.json" > "$ZED_DEST/settings.json.tmp"
+mv "$ZED_DEST/settings.json.tmp" "$ZED_DEST/settings.json"
 
 echo "Zed config synced to $ZED_DEST"
