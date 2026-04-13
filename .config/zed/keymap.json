@@ -4,5 +4,23 @@
     "bindings": {
       "space": "command_palette::Toggle"
     }
+  },
+  {
+    "context": "os == linux > Terminal",
+    "bindings": {
+      "ctrl-j": ["terminal::SendKeystroke", "ctrl-j"]
+    }
+  },
+  {
+    "context": "os == linux > Editor",
+    "bindings": {
+      "ctrl-j": "editor::JoinLines"
+    }
+  },
+  {
+    "context": "Workspace && os == linux",
+    "bindings": {
+      "ctrl-j": null
+    }
   }
 ]
