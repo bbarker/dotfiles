@@ -28,8 +28,25 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ unison-lang.overlay ]
-          ++ (if (isLinux && isImpure) then [ nixgl.overlays.default ] else []);
+        overlays = [
+          unison-lang.overlay
+          (final: prev: {
+            unison-ucm = prev.unison-ucm.overrideAttrs (old: rec {
+              version = "1.2.0";
+              src = let
+                platform = {
+                  aarch64-darwin = { sys = "macos-arm64"; hash = "sha256-Tb9j3GZxIYgHBWEHTIHKo+tpnilXj8cf4GlqnfXrJZ4="; };
+                  x86_64-darwin = { sys = "macos-x64"; hash = "sha256-FIXME"; };
+                  x86_64-linux = { sys = "linux-x64"; hash = "sha256-FIXME"; };
+                  aarch64-linux = { sys = "linux-arm64"; hash = "sha256-FIXME"; };
+                }.${final.stdenv.hostPlatform.system};
+              in final.fetchurl {
+                url = "https://github.com/unisonweb/unison/releases/download/release/${version}/ucm-${platform.sys}.tar.gz";
+                inherit (platform) hash;
+              };
+            });
+          })
+        ] ++ (if (isLinux && isImpure) then [ nixgl.overlays.default ] else []);
         config.allowUnfree = true;
       };
     # ai-sh = pkgs.rustPlatform.buildRustPackage rec {
@@ -57,7 +74,7 @@
     #     license = licenses.mit;
     #   };
     # };
-      
+
     in {
       homeConfigurations."bbarker" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
