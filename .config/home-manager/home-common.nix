@@ -38,6 +38,7 @@ in
     # to use alternative claude-code versions
     # first do `npm set prefix ~/.npm-global`
     nodejs
+    bun
 
     git
     gitAndTools.gh

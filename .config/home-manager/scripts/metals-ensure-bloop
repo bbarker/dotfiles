@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Ensure build server config exists for Metals.
+# Called from .envrc after `use flake` for Scala projects.
+# Handles both Bloop (bloopInstall) and sbt BSP (.bsp/sbt.json) projects.
+# Clears stale .metals state if no build targets are available.
+
+set -euo pipefail
+
+if [ ! -f build.sbt ] && [ ! -f build.sc ]; then
+  exit 0
+fi
+
+# sbt BSP: .bsp/sbt.json means sbt is the build server — nothing to generate
+if [ -f .bsp/sbt.json ]; then
+  # Just ensure stale .metals doesn't confuse things
+  if [ -d .metals ] && ! ls .metals/metals.log &>/dev/null; then
+    rm -rf .metals
+  fi
+  exit 0
+fi
+
+# Bloop: need .bloop/*.json (beyond just bloop.settings.json)
+if [ -d .bloop ] && ls .bloop/*-test.json &>/dev/null 2>&1; then
+  exit 0
+fi
+
+echo "metals-ensure-bloop: generating bloop config..."
+sbt -Dbloop.export-jar-classifiers=sources bloopInstall
