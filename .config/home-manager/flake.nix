@@ -32,13 +32,13 @@
           unison-lang.overlay
           (final: prev: {
             unison-ucm = prev.unison-ucm.overrideAttrs (old: rec {
-              version = "1.2.0";
+              version = "1.3.0";
               src = let
                 platform = {
-                  aarch64-darwin = { sys = "macos-arm64"; hash = "sha256-Tb9j3GZxIYgHBWEHTIHKo+tpnilXj8cf4GlqnfXrJZ4="; };
-                  x86_64-darwin = { sys = "macos-x64"; hash = "sha256-FIXME"; };
-                  x86_64-linux = { sys = "linux-x64"; hash = "sha256-FIXME"; };
-                  aarch64-linux = { sys = "linux-arm64"; hash = "sha256-FIXME"; };
+                  aarch64-darwin = { sys = "macos-arm64"; hash = "sha256-DBNZx90rLqeRrjAnscamI8sduIH966az+AfMpWzberk="; };
+                  x86_64-darwin = { sys = "macos-x64"; hash = "sha256-ei/w82erwVf3oLbXcisBkPv2/k4gvwSxshTg7PWijhw="; };
+                  x86_64-linux = { sys = "linux-x64"; hash = "sha256-DFLiI3Rro2ApmT84xndGdaLWH/Ad/HXEY6bj331tQzs="; };
+                  aarch64-linux = { sys = "linux-arm64"; hash = "sha256-6XRr8IOwRhZlGFD9xb29cvqqYVjZFzSvh3S52Cq4HMo="; };
                 }.${final.stdenv.hostPlatform.system};
               in final.fetchurl {
                 url = "https://github.com/unisonweb/unison/releases/download/release/${version}/ucm-${platform.sys}.tar.gz";
