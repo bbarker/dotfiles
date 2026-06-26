@@ -843,11 +843,11 @@
         "unison": "unison"
       },
       "locked": {
-        "lastModified": 1770661811,
-        "narHash": "sha256-YWd1clM9A4kkkFvVSzVBIfGf09sZzNqbbt9hDqx+izs=",
+        "lastModified": 1782382686,
+        "narHash": "sha256-Jq3oFj3qxd9YpOBAUs48ZPpr4DBc6KEto20QdFO8Nxs=",
         "owner": "ceedubs",
         "repo": "unison-nix",
-        "rev": "451afabefe1fbd36f081c641cd112db1fcbcb622",
+        "rev": "f5ebed834bfe7d545a644f1485f573ed10575417",
         "type": "github"
       },
       "original": {
