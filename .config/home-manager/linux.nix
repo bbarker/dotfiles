@@ -8,6 +8,7 @@ in
   # Packages for all Linux systems
   packages = with pkgs; [
     appimage-run
+    bubblewrap
   ] ++ (if hasNixGL then [ pkgs.nixgl.auto.nixGLDefault ] else []);
 
   # Wrap a package with nixGL (no-op if nixGL not available)
