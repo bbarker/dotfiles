@@ -33,6 +33,7 @@ in
     helix
     bashInteractive
     nushell
+    viu
     # ai-sh
     pkgsUntable.claude-code
     # to use alternative claude-code versions

@@ -9,6 +9,7 @@ in
   packages = with pkgs; [
     appimage-run
     bubblewrap
+    zathura
   ] ++ (if hasNixGL then [ pkgs.nixgl.auto.nixGLDefault ] else []);
 
   # Wrap a package with nixGL (no-op if nixGL not available)
