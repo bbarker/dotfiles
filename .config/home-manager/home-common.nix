@@ -33,6 +33,9 @@ in
     helix
     bashInteractive
     nushell
+
+    # image viewers
+    oculante
     viu
     # ai-sh
     pkgsUntable.claude-code
