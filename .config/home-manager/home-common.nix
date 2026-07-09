@@ -46,6 +46,7 @@ in
 
     git
     gitAndTools.gh
+    meld
     openssh
     tig
     deno
