@@ -88,21 +88,20 @@ mkdir -p "$NU_CONF_DIR"
 cp nu_config/*.nu "$NU_CONF_DIR/"
 
 
-if command -v home-manager >/dev/null 2>&1; then
-    echo "home-manager is available in the PATH; updating."
-    nix-channel --update
-else
-    echo "home-manager is not available in the PATH; installing."
-    nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-    nix-channel --update
-    nix-shell '<home-manager>' -A install
-fi
-
+# Update flake inputs
 cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit;}
 nix flake update
 cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit; }
-# --impure required for nixGL (GPU support on non-NixOS)
-home-manager switch --impure
+
+if command -v home-manager >/dev/null 2>&1; then
+    echo "home-manager is available in the PATH; switching."
+    # --impure required for nixGL (GPU support on non-NixOS)
+    home-manager switch --flake "$HOME/.config/home-manager#bbarker" --impure
+else
+    echo "home-manager is not available in the PATH; bootstrapping via flake."
+    # --impure required for nixGL (GPU support on non-NixOS)
+    nix run "github:nix-community/home-manager/release-${DESIRED_VERSION}" -- switch --flake "$HOME/.config/home-manager#bbarker" --impure
+fi
 
 cp "$HOME/.config/home-manager/flake.lock" "flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 
@@ -131,5 +130,9 @@ if [ -f "$ZED_LOCAL" ]; then
     mv "$ZED_DEST/settings.json.tmp" "$ZED_BASE"
 fi
 
-shellcheck build.sh
+if command -v shellcheck >/dev/null 2>&1; then
+    shellcheck build.sh
+else
+    nix-shell -p shellcheck --run "shellcheck build.sh"
+fi
 git status
