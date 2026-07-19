@@ -9,6 +9,7 @@
       url = "github:nix-community/home-manager/release-NIX_VERSION_PLACEHOLDER";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    claude-code.url = "github:sadjow/claude-code-nix";
     unison-lang = {
       url = "github:ceedubs/unison-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,7 +21,7 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, unison-lang, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, claude-code,  unison-lang, nixgl, ... }:
     let
       system = "SYSTEM_PLACEHOLDER";
       isLinux = builtins.match ".*linux.*" system != null;

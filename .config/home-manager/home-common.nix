@@ -38,7 +38,7 @@ in
     oculante
     viu
     # ai-sh
-    pkgsUntable.claude-code
+    claude-code
     # to use alternative claude-code versions
     # first do `npm set prefix ~/.npm-global`
     nodejs
