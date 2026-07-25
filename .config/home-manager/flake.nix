@@ -30,6 +30,7 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
+          claude-code.overlays.default
           unison-lang.overlay
           (final: prev: {
             unison-ucm = prev.unison-ucm.overrideAttrs (old: rec {
