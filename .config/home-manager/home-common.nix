@@ -58,6 +58,7 @@ in
     ripgrep-all
     htop
     shellcheck
+    sccache
 
     awscli2
     pgcli
@@ -140,13 +141,29 @@ in
   programs.bash.enable = true;
   programs.bash.profileExtra = ''
     source "$HOME/.cargo/env"
+    if [ -d "/var/cache/sccache" ]; then
+      export SCCACHE_DIR="/var/cache/sccache"
+      export RUSTC_WRAPPER="sccache"
+    fi
   '';
   programs.bash.initExtra = ''
     # Source session vars for non-login shells (e.g., terminal emulators)
     [[ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]] && \
       source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
+    # Use shared sccache directory if present
+    if [ -d "/var/cache/sccache" ]; then
+      export SCCACHE_DIR="/var/cache/sccache"
+      export RUSTC_WRAPPER="sccache"
+    fi
   '';
   programs.zsh.enable = true;
+  programs.zsh.initExtra = ''
+    if [ -d "/var/cache/sccache" ]; then
+      export SCCACHE_DIR="/var/cache/sccache"
+      export RUSTC_WRAPPER="sccache"
+    fi
+  '';
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

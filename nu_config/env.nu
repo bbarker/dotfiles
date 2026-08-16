@@ -96,5 +96,11 @@ $env.NU_PLUGIN_DIRS = [
 # path add ($env.HOME | path join ".local" "bin")
 # $env.PATH = ($env.PATH | uniq)
 
+# Use shared sccache directory if present
+if ('/var/cache/sccache' | path exists) {
+    $env.SCCACHE_DIR = '/var/cache/sccache'
+    $env.RUSTC_WRAPPER = 'sccache'
+}
+
 # To load from a custom file you can use:
 # source ($nu.default-config-dir | path join 'custom.nu')
