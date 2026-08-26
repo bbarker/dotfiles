@@ -183,7 +183,9 @@ fi
 
 # Optional: Install helix grammars (non-blocking, headless)
 export GIT_TERMINAL_PROMPT=0
-if command -v hx >/dev/null 2>&1; then
+if [ "$OS" = "Linux" ] && [ "$ARCH_NAME" = "aarch64" ]; then
+    echo "Skipping optional Helix bulk grammar fetch on Raspberry Pi."
+elif command -v hx >/dev/null 2>&1; then
     echo "Fetching and building Helix grammars (optional)..."
     hx --grammar fetch 2>/dev/null || true
     if command -v clang >/dev/null 2>&1 || command -v gcc >/dev/null 2>&1; then

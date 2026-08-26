@@ -38,7 +38,6 @@ in
     oculante
     viu
     # ai-sh
-    claude-code
     # to use alternative claude-code versions
     # first do `npm set prefix ~/.npm-global`
     nodejs
@@ -85,8 +84,10 @@ in
     # must be last
     zsh-syntax-highlighting
   ] ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-linux") [
-    # Bloop currently has no Linux ARM64 build.
+    # These derivations are unsuitable for small Linux ARM64 systems: Bloop
+    # has no ARM64 build, and Claude Code's fixup phase exceeds the Pi's RAM.
     bloop
+    claude-code
   ];
 
   home.file.".local/bin" = {
@@ -160,7 +161,7 @@ in
     fi
   '';
   programs.zsh.enable = true;
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     if [ -d "/var/cache/sccache" ]; then
       export SCCACHE_DIR="/var/cache/sccache"
       export RUSTC_WRAPPER="sccache"
