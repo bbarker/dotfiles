@@ -13,5 +13,6 @@ in
     packages = x11home.packages ++ common.home.packages;
     username = "bbarker";
     homeDirectory = "/home/bbarker";
+    stateVersion = "25.05";
   };
- }
+}

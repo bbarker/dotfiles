@@ -40,7 +40,9 @@ sed_i() {
 
 ########################
 
-REPO_DIR=$(pwd)
+REPO_DIR=$(dirname -- "$0")
+REPO_DIR=$(cd "$REPO_DIR" && pwd)
+cd "$REPO_DIR" || { echo "couldn't cd to repository directory" >&2; exit 1; }
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     git pull || echo "Warning: git pull failed, continuing..."
 fi
@@ -112,7 +114,35 @@ fi
 
 # Update flake inputs
 cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit 1; }
-nix --extra-experimental-features "nix-command flakes" flake update
+# Keep evaluation and activation within the memory budget of small Raspberry
+# Pi models. Users can override this explicitly in NIX_CONFIG.
+case "${NIX_CONFIG:-}" in
+    *'max-jobs ='*) ;;
+    *) NIX_CONFIG="${NIX_CONFIG:-}
+max-jobs = 1
+cores = 1"; export NIX_CONFIG ;;
+esac
+# Reuse a lock captured for this machine when one is available. This is
+# especially important on a Raspberry Pi: resolving every input again can be
+# slow, memory-intensive, and needlessly depends on GitHub being reachable.
+LOCK_FILE="$REPO_DIR/flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
+if [ -f "$LOCK_FILE" ]; then
+    cp "$LOCK_FILE" ./flake.lock
+    echo "Using checked-in flake lock: $LOCK_FILE"
+fi
+
+if [ "${UPDATE_FLAKE_INPUTS:-0}" = "1" ] || [ ! -f ./flake.lock ]; then
+    if ! nix --extra-experimental-features "nix-command flakes" flake update; then
+        if [ -f ./flake.lock ]; then
+            echo "Warning: flake update failed; continuing with the existing lock file..." >&2
+        else
+            echo "Error: flake update failed and no lock file is available." >&2
+            exit 1
+        fi
+    fi
+else
+    echo "Skipping flake update; using the checked-in lock. Set UPDATE_FLAKE_INPUTS=1 to update inputs."
+fi
 cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit 1; }
 
 if command -v home-manager >/dev/null 2>&1; then

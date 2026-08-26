@@ -64,7 +64,6 @@ in
     pgcli
 
     coursier
-    bloop
     metals
     scalafmt
     sbt
@@ -85,6 +84,9 @@ in
 
     # must be last
     zsh-syntax-highlighting
+  ] ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-linux") [
+    # Bloop currently has no Linux ARM64 build.
+    bloop
   ];
 
   home.file.".local/bin" = {
