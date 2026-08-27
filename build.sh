@@ -38,6 +38,68 @@ sed_i() {
     done
 }
 
+cpu_count() {
+    count=$(getconf _NPROCESSORS_ONLN 2>/dev/null || true)
+    if [ -z "$count" ] && command -v sysctl >/dev/null 2>&1; then
+        count=$(sysctl -n hw.ncpu 2>/dev/null || true)
+    fi
+    case "$count" in
+        ''|*[!0-9]*|0) echo 1 ;;
+        *) echo "$count" ;;
+    esac
+}
+
+memory_kib() {
+    if [ -r /proc/meminfo ]; then
+        awk '/^MemTotal:/ { print $2; exit }' /proc/meminfo
+    elif command -v sysctl >/dev/null 2>&1; then
+        bytes=$(sysctl -n hw.memsize 2>/dev/null || true)
+        case "$bytes" in
+            ''|*[!0-9]*) echo 2097152 ;;
+            *) echo $((bytes / 1024)) ;;
+        esac
+    else
+        # Conservative fallback when the host does not expose memory details.
+        echo 2097152
+    fi
+}
+
+nix_config_has() {
+    printf '%s\n' "${NIX_CONFIG:-}" | grep -Eq "^[[:space:]]*$1[[:space:]]*="
+}
+
+configure_nix_parallelism() {
+    cpus=$(cpu_count)
+    mem_kib=$(memory_kib)
+
+    # Budget roughly 2 GiB for each concurrent Nix build and cap concurrent
+    # jobs at four to avoid excessive I/O and evaluator overhead.
+    jobs=$((mem_kib / 2097152))
+    [ "$jobs" -lt 1 ] && jobs=1
+    [ "$jobs" -gt "$cpus" ] && jobs=$cpus
+    [ "$jobs" -gt 4 ] && jobs=4
+
+    # Divide CPUs and memory among those jobs. This keeps a 1 GiB Pi at 1/1,
+    # while allowing larger machines to use multiple cores per build.
+    cores_by_cpu=$((cpus / jobs))
+    cores_by_mem=$((mem_kib / jobs / 1048576))
+    [ "$cores_by_cpu" -lt 1 ] && cores_by_cpu=1
+    [ "$cores_by_mem" -lt 1 ] && cores_by_mem=1
+    cores=$cores_by_cpu
+    [ "$cores" -gt "$cores_by_mem" ] && cores=$cores_by_mem
+
+    if ! nix_config_has max-jobs; then
+        NIX_CONFIG="${NIX_CONFIG:-}
+max-jobs = $jobs"
+    fi
+    if ! nix_config_has cores; then
+        NIX_CONFIG="${NIX_CONFIG:-}
+cores = $cores"
+    fi
+    export NIX_CONFIG
+    echo "Detected Nix defaults: max-jobs=$jobs, cores=$cores (${cpus} CPUs, $((mem_kib / 1024)) MiB RAM). Explicit NIX_CONFIG values take precedence."
+}
+
 ########################
 
 REPO_DIR=$(dirname -- "$0")
@@ -114,14 +176,8 @@ fi
 
 # Update flake inputs
 cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit 1; }
-# Keep evaluation and activation within the memory budget of small Raspberry
-# Pi models. Users can override this explicitly in NIX_CONFIG.
-case "${NIX_CONFIG:-}" in
-    *'max-jobs ='*) ;;
-    *) NIX_CONFIG="${NIX_CONFIG:-}
-max-jobs = 1
-cores = 1"; export NIX_CONFIG ;;
-esac
+# Keep evaluation and activation within the host's CPU and memory budget.
+configure_nix_parallelism
 # Reuse a lock captured for this machine when one is available. This is
 # especially important on a Raspberry Pi: resolving every input again can be
 # slow, memory-intensive, and needlessly depends on GitHub being reachable.
