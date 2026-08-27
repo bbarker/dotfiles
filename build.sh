@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# A failed Home Manager activation must fail the installer. Without this,
+# shell commands such as a killed Nix build were followed by a misleading
+# successful-looking completion and an empty user profile.
+set -eu
+
 ###### Functions #######
 
 desiredSystem() {
