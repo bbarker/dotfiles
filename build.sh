@@ -233,13 +233,19 @@ done
 export PATH
 # shellcheck disable=SC1091
 if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    set +u
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+    set -u
 elif [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix.sh" ]; then
+    set +u
     . "/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
+    set -u
 fi
 # shellcheck disable=SC1091
 if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+    set +u
     . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+    set -u
 fi
 
 # Optional: Install helix grammars (non-blocking, headless)
