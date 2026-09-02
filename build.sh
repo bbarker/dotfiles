@@ -107,6 +107,37 @@ cores = $cores"
 
 ########################
 
+# Yellow when the terminal can render it; piped output and NO_COLOR stay plain.
+if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
+    WARN_ON=$(printf '\033[1;33m')
+    WARN_OFF=$(printf '\033[0m')
+else
+    WARN_ON=""
+    WARN_OFF=""
+fi
+
+warn_yellow() {
+    printf '%s%s%s\n' "$WARN_ON" "$1" "$WARN_OFF"
+}
+
+# Inputs that cut a release almost daily. The checked-in lock deliberately
+# freezes heavy inputs such as nixpkgs, but freezing these too leaves Claude
+# Code weeks behind upstream, so refresh just them on every build.
+FAST_MOVING_INPUTS="claude-code"
+
+refresh_fast_moving_inputs() {
+    for fast_input in $FAST_MOVING_INPUTS; do
+        # Nix 2.19 takes the input as a positional argument; older releases
+        # only understand --update-input.
+        if nix --extra-experimental-features "nix-command flakes" flake update "$fast_input" 2>/dev/null \
+            || nix --extra-experimental-features "nix-command flakes" flake lock --update-input "$fast_input"; then
+            echo "Refreshed fast-moving flake input: $fast_input"
+        else
+            echo "Warning: could not refresh flake input '$fast_input'; keeping the locked revision." >&2
+        fi
+    done
+}
+
 REPO_DIR=$(dirname -- "$0")
 REPO_DIR=$(cd "$REPO_DIR" && pwd)
 cd "$REPO_DIR" || { echo "couldn't cd to repository directory" >&2; exit 1; }
@@ -122,6 +153,24 @@ fi
 HOSTNAME="$(hostname)"
 CURRENT_USER="${USER:-$(id -un)}"
 CURRENT_HOME="${HOME:-/home/$CURRENT_USER}"
+
+# Reuse a lock captured for this machine when one is available. This is
+# especially important on a Raspberry Pi: resolving every input again can be
+# slow, memory-intensive, and needlessly depends on GitHub being reachable.
+LOCK_FILE="$REPO_DIR/flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
+
+# Say so before the build starts, rather than leaving the user to wonder why a
+# package they expected to move stayed put.
+if [ "${UPDATE_FLAKE_INPUTS:-0}" != "1" ] \
+    && { [ -f "$LOCK_FILE" ] || [ -f "$CURRENT_HOME/.config/home-manager/flake.lock" ]; }; then
+    warn_yellow "Warning: this build reuses the checked-in flake lock."
+    warn_yellow "         nixpkgs, home-manager and most other inputs stay pinned at their"
+    warn_yellow "         recorded revisions, so their packages will NOT be updated."
+    if [ "${REFRESH_FAST_INPUTS:-1}" = "1" ]; then
+        warn_yellow "         Only fast-moving inputs are refreshed: $FAST_MOVING_INPUTS"
+    fi
+    warn_yellow "         Run 'UPDATE_FLAKE_INPUTS=1 ./build.sh' to update every input."
+fi
 
 # Copy configuration files into user's home directory
 cp -R .config "$HOME/"
@@ -183,10 +232,6 @@ fi
 cd "$HOME/.config/home-manager/" || { echo "couldn't cd to home-manager config dir"; exit 1; }
 # Keep evaluation and activation within the host's CPU and memory budget.
 configure_nix_parallelism
-# Reuse a lock captured for this machine when one is available. This is
-# especially important on a Raspberry Pi: resolving every input again can be
-# slow, memory-intensive, and needlessly depends on GitHub being reachable.
-LOCK_FILE="$REPO_DIR/flake_locks/flake-$ARCH_NAME-$OS-$HOSTNAME.lock"
 if [ -f "$LOCK_FILE" ]; then
     cp "$LOCK_FILE" ./flake.lock
     echo "Using checked-in flake lock: $LOCK_FILE"
@@ -202,7 +247,10 @@ if [ "${UPDATE_FLAKE_INPUTS:-0}" = "1" ] || [ ! -f ./flake.lock ]; then
         fi
     fi
 else
-    echo "Skipping flake update; using the checked-in lock. Set UPDATE_FLAKE_INPUTS=1 to update inputs."
+    echo "Skipping flake update; using the checked-in lock (see the warning above)."
+    if [ "${REFRESH_FAST_INPUTS:-1}" = "1" ]; then
+        refresh_fast_moving_inputs
+    fi
 fi
 cd "$REPO_DIR" || { echo "couldn't cd to REPO_DIR"; exit 1; }
 
