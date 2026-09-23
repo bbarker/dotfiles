@@ -49,6 +49,7 @@ in
     openssh
     tig
     deno
+    rclone
 
     dogedns
     fzf
