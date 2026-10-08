@@ -34,13 +34,13 @@
           unison-lang.overlay
           (final: prev: {
             unison-ucm = prev.unison-ucm.overrideAttrs (old: rec {
-              version = "1.4.0";
+              version = "1.5.0";
               src = let
                 platform = {
-                  aarch64-darwin = { sys = "macos-arm64"; hash = "sha256-ZBlW1OyxSC3UgtsBu8FkmSFZ4YOAi8zpGBTMfUoumzI="; };
-                  x86_64-darwin = { sys = "macos-x64"; hash = "sha256-hoWU3y3aDn6mjGkH1YaSzAtL9Mlzo6fNfnr1LM/7y3E="; };
-                  x86_64-linux = { sys = "linux-x64"; hash = "sha256-RhO0UawMl/IHSP2vTchwKgLVjpmnA3V3056A14C6Elk="; };
-                  aarch64-linux = { sys = "linux-arm64"; hash = "sha256-tphCr3P8EWsyOc7D47duA2sR1xPy/YyBzQlZOn53py0="; };
+                  aarch64-darwin = { sys = "macos-arm64"; hash = "sha256-Ph1ql4I1qPmJpYTjMuZw7KGMFfEJn88YgfwSa2K9vq4="; };
+                  x86_64-darwin = { sys = "macos-x64"; hash = "sha256-T55TdDTY4WFeBGtCJ8jCenei5t2fFJeK9jhSN//Bi5I="; };
+                  x86_64-linux = { sys = "linux-x64"; hash = "sha256-/LLtYoTh9puhDE6Kgo3WVxDwnPHujLh25zKqnvVmz/Q="; };
+                  aarch64-linux = { sys = "linux-arm64"; hash = "sha256-pL4UQdBAu6vbQB24KUz3aRqT+QIhmSvY59W46frb/04="; };
                 }.${final.stdenv.hostPlatform.system};
               in final.fetchurl {
                 url = "https://github.com/unisonweb/unison/releases/download/release/${version}/ucm-${platform.sys}.tar.gz";
