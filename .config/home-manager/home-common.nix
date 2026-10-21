@@ -73,6 +73,7 @@ in
     visualvm
 
     unison-ucm
+    tlaplus # tlc, for the TLA+ models stored in Unison libraries
 
     python3 # needed for sshuttle
 

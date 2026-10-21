@@ -1,0 +1,46 @@
+# Public identifiers only. Execute scripts on the host, outside agent containers.
+[drive]
+luks_uuid = "99353a19-1915-42ce-9059-179ed16470ae"
+filesystem_uuid = "4ddbc129-272d-41ab-873e-1911e6670c0d"
+filesystem_type = "xfs"
+lock_file = "/var/workspace/.workspace-drive.lock"
+
+# Canonical IDs on disk. Names resolve to each host's local IDs.
+# Additional owners/groups must be inventoried before a second-host migration.
+[[users]]
+name = "root"
+disk_id = 0
+[[users]]
+name = "bbarker"
+disk_id = 1000
+[[users]]
+name = "borg"
+disk_id = 30033
+
+[[groups]]
+name = "root"
+disk_id = 0
+[[groups]]
+name = "bbarker"
+disk_id = 1000
+[[groups]]
+name = "borg"
+disk_id = 30033
+[[groups]]
+name = "workspace"
+disk_id = 30002
+
+[[projects]]
+name = "AlygnApp"
+enabled = true # Renamed from AlygnResearch; SSD cutover verified 2026-10-21.
+directory = "projects/AlygnApp"
+target = "/var/workspace/AlygnApp"
+backup = "/var/workspace/AlygnApp-Host"
+
+
+[[projects]]
+name = "shoggothox"
+enabled = true
+directory = "projects/shoggothox"
+target = "/var/workspace/shoggothox"
+backup = "/var/workspace/shoggothox-Host"

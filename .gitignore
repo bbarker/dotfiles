@@ -1,2 +1,4 @@
 .unisonHistory
 .config/zed/settings.local.json
+.commit-notes.md
+.commit-notes.lock
