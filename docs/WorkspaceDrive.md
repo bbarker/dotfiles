@@ -112,8 +112,45 @@ even if project mounts succeeded. Do not pull the cable after an error.
 confirms the operator has stopped writers; it cannot stop unrelated processes
 committing. It backs up the raw projects, unmounts project views, flushes writes,
 unmounts the filesystem and locks LUKS. Busy unmounts fail normally; there is no
-forced/lazy detach or implicit backup bypass. It can retry after partial project
-unmounts; if only locking failed, use UDisks to lock the now-unmounted volume.
+forced/lazy detach or implicit backup bypass while the drive is attached. It can retry
+after partial project unmounts and is safe to repeat: with nothing mounted it only locks
+a drive left unlocked, or says there is nothing to do.
+
+### After the drive was pulled while mounted
+
+If the cable was pulled (or the drive reset) with the project views still bound, the
+bind mounts outlive the disk: their LUKS mapping `luks-<LUKS UUID>` has no disk under it,
+`findmnt` shows no filesystem UUID for them, and `mount` refuses with "not the configured
+SSD project mount". `unmount --quiescent` recognises exactly this state - every
+mount of the configured mapping with no readable filesystem, and a mapping whose
+sysfs disk links no longer resolve - and then:
+
+1. says no final backup is possible this run and prints when each host backup was last
+   updated (the SSD still holds anything newer; replug and `backup` to capture it);
+2. lazily detaches those mounts (there is nothing readable left for a lazy detach to lose);
+3. closes the dead mapping (`cryptsetup close`, then `dmsetup remove --force`);
+4. if processes still hold the dead drive it lists them and has the kernel remove the
+   mapping when the last of them lets go (`dmsetup remove --deferred`). It finds them
+   however they hold it, not only by `lsof`: a working directory or open file that now
+   fails with an I/O error, a watch on its files, a mapped file, or a mount namespace of
+   their own that still has it mounted. Each row says which, so an editor's language
+   server is not a mystery. A process of another user is invisible to an ordinary user:
+   run `sudo nu scripts/workspace-drive.nu unmount --quiescent` to see them all.
+   Restart those processes; `mount` refuses while the dead mapping remains. Repeating the
+   command is safe.
+
+`unmount --quiescent --force` goes one step further for a mapping that a process still
+holds: it renames the dead mapping (`dmsetup rename`, allowed while a device is open) so its
+name is free for the replugged drive to be unlocked under, and leaves the dead device to
+disappear when the last holder exits. It changes nothing unless a drive was pulled while
+mounted, and it cannot make the holder let go. The kernel may still refuse to mount the
+replugged filesystem while the old one lingers (the same filesystem UUID twice); in that
+case end the processes in the table, or reboot. It worked on the first real dead
+mapping (it renamed it to `luks-<UUID>-dead-<time>`); each later run lists what still
+holds the renamed device until it disappears.
+
+A mapping whose disk is still attached is never treated this way, and none of it runs
+against a live mount. Afterwards `mount` unlocks the replugged drive as usual.
 
 ## Host Git history and restoration
 

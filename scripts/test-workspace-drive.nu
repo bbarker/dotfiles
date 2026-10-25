@@ -1,5 +1,6 @@
 use std assert
 use workspace-git.nu [checked backup-repository]
+use workspace-drive.nu [stale-mounts-in dev-codes]
 
 def main [] {
     let temporary = (mktemp --directory | str trim)
@@ -58,5 +59,20 @@ def main [] {
     checked git ['-C' $restored 'checkout' '--detach' 'FETCH_HEAD'] | ignore
     assert equal (open --raw ($restored | path join 'tracked.txt')) 'three'
     rm --recursive $temporary
-    print 'PASS: ordinary independent clone, automatic fetch contract, no pruning, retagging, detached HEAD, working-copy preservation and disconnected restore.'
+    # A pulled drive leaves bind mounts of its LUKS mapping with no filesystem behind them.
+    let config = {drive: {luks_uuid: '99353a19-1915-42ce-9059-179ed16470ae', filesystem_uuid: '4ddbc129-272d-41ab-873e-1911e6670c0d'}}
+    let mapping = '/dev/mapper/luks-99353a19-1915-42ce-9059-179ed16470ae'
+    let mounts = [
+        {target: '/var/workspace/pulled', source: $'($mapping)[/projects/pulled]', fstype: 'xfs', uuid: null, fsroot: '/projects/pulled'}
+        {target: '/var/workspace/blank', source: $'($mapping)[/projects/blank]', fstype: 'xfs', uuid: '', fsroot: '/projects/blank'}
+        {target: '/var/workspace/live', source: $'($mapping)[/projects/live]', fstype: 'xfs', uuid: '4ddbc129-272d-41ab-873e-1911e6670c0d', fsroot: '/projects/live'}
+        {target: '/', source: '/dev/mapper/data-root', fstype: 'ext4', uuid: 'a7ef1cb6-31a9-4ef9-99a8-11186b8cbeda', fsroot: '/'}
+        {target: '/mnt/other', source: '/dev/mapper/luks-other', fstype: 'xfs', uuid: null, fsroot: '/'}
+    ]
+    assert equal (stale-mounts-in $config $mounts | get target) ['/var/workspace/pulled' '/var/workspace/blank']
+    assert equal (stale-mounts-in $config ($mounts | where target in ['/' '/var/workspace/live'])) []
+    # How the kernel spells device 252:2 where a process can show it still holds it.
+    assert equal (dev-codes '252:2') {sdev: 'fc00002', maps: 'fc:02', mountinfo: '252:2'}
+    assert equal (dev-codes '8:17') {sdev: '800011', maps: '08:11', mountinfo: '8:17'}
+    print 'PASS: ordinary independent clone, automatic fetch contract, no pruning, retagging, detached HEAD, working-copy preservation, disconnected restore and stale-mount detection and device-number spellings (a live, a foreign or an unrelated mount is never stale).'
 }
