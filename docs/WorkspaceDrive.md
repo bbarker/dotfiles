@@ -139,6 +139,14 @@ sysfs disk links no longer resolve - and then:
    Restart those processes; `mount` refuses while the dead mapping remains. Repeating the
    command is safe.
 
+   When the row is `zed-editor`, closing files does not help: every folder of a window's
+   project stays open and watched until it is removed. `nu scripts/zed-holders.nu` lists
+   the project folders of each open Zed window (a folder from the dead drive shows an
+   error instead of `ok`), directories Zed holds that are deleted or unreadable, and its
+   file watches by device (watches on a device with nothing mounted are the dead drive).
+   Remove those folders with Remove from Project in the Project Panel, or close the window.
+   `nu scripts/test-zed-holders.nu` checks it against a fixture database and a sleeper.
+
 `unmount --quiescent --force` goes one step further for a mapping that a process still
 holds: it renames the dead mapping (`dmsetup rename`, allowed while a device is open) so its
 name is free for the replugged drive to be unlocked under, and leaves the dead device to
