@@ -269,7 +269,10 @@ def clear-stale [config: record, stale: list, force: bool] {
             # here; have the kernel drop the mapping when the last of them lets go.
             print 'Still holding the dead drive (processes of other users are not visible; run with sudo to see them):'
             print (holders $dev)
-            if $force {
+            if not ($node | path exists) {
+                # A lazy detach finishes in the background, so the last hold can go while this runs.
+                print $'Closed the dead mapping ($name) once its last holder let go.'
+            } else if $force {
                 # A device can be renamed while open, which frees the name `mount` unlocks under.
                 let moved = $'($name)-dead-(date now | format date '%Y%m%d%H%M%S')'
                 if not (attempt 'sudo' 'dmsetup' 'rename' $name $moved) { error make {msg: $'Could not rename the dead mapping ($name) out of the way. End or restart the processes above, then repeat this command.'} }
