@@ -7,9 +7,9 @@
 { inputs, config, pkgs, ... }:
 
 let
-  pkgsUntable = import (fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/905537956250bd4c0d7de778b8a8ee9af6daac58.tar.gz"; # 03/06/25
-    sha256 = "sha256:0indqp22d7w8zl2wfnzq0id1l697xc7rsxpf2z58hr28inra1r9v";
+  pkgsUnstable = import (fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/6dadaf4375be35033e1c84395adbd53ff5fded96.tar.gz"; # 2026-11-04, nixpkgs-unstable
+    sha256 = "sha256:1g9sadx7zszll972hlv78675vc5vz2iw8v9jzs4338ccx8gzp48g";
   }) {
     system = "SYSTEM_PLACEHOLDER";
     config.allowUnfree = true;    
@@ -32,7 +32,7 @@ in
     tmux
     helix
     bashInteractive
-    nushell
+    pkgsUnstable.nushell # 25.05 ships 0.104, too old for `get -o`
 
     # image viewers
     oculante
