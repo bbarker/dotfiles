@@ -1,0 +1,51 @@
+#!/usr/bin/env nu
+# The variables a bash-sourceable file (a .env, an `export X=...` script) sets,
+# as JSON for `load-env`. Bash does the sourcing, so quoting, `export`,
+# comments and references such as $HOME mean exactly what they mean there;
+# plain `X=1` lines count too, as they would under `set -a`.
+#
+# A script cannot change the environment of the shell that runs it, so
+# nu_config/commands.nu wraps this: `source_nu <file>` there loads the
+# variables into the current shell. Run directly, it prints them, values
+# included; `--names` prints only the names.
+
+# Every exported variable as NAME=value, NUL-separated, so a value may hold a
+# newline. Plain bash: the non-interactive build has no `compgen`, and `env -0`
+# is not on every platform.
+const DUMP = 'for name in ${!A@} ${!B@} ${!C@} ${!D@} ${!E@} ${!F@} ${!G@} ${!H@} ${!I@} ${!J@} ${!K@} ${!L@} ${!M@} ${!N@} ${!O@} ${!P@} ${!Q@} ${!R@} ${!S@} ${!T@} ${!U@} ${!V@} ${!W@} ${!X@} ${!Y@} ${!Z@} ${!a@} ${!b@} ${!c@} ${!d@} ${!e@} ${!f@} ${!g@} ${!h@} ${!i@} ${!j@} ${!k@} ${!l@} ${!m@} ${!n@} ${!o@} ${!p@} ${!q@} ${!r@} ${!s@} ${!t@} ${!u@} ${!v@} ${!w@} ${!x@} ${!y@} ${!z@} ${!_@}; do flags=$(declare -p "$name" 2> /dev/null); flags=${flags#declare -}; [[ ${flags%% *} == *x* ]] && printf "%s=%s\0" "$name" "${!name}"; done; true'
+const SOURCE = 'set -a; . "$1" > /dev/null || exit 1; set +a; '
+# Bash sets these itself; they are not the file's.
+const BASH_OWN = [_ SHLVL PWD OLDPWD]
+
+def exported [prelude: string, file: string] {
+    let result = (^bash -c $"($prelude)($DUMP)" source_nu $file | complete)
+    if $result.exit_code != 0 {
+        error make {msg: $"bash could not source ($file): ($result.stderr | str trim)"}
+    }
+    $result.stdout
+    | split row (char nul)
+    | where {|entry| $entry != '' }
+    | parse --regex '(?s)^(?P<name>[^=]+)=(?P<value>.*)$'
+}
+
+# The variables `file` sets or changes, compared with bash's environment
+# before it is sourced.
+export def set-by [file: string] {
+    let before = (exported '' $file)
+    exported $SOURCE $file
+    | where {|row|
+        ($row.name not-in $BASH_OWN) and not ($before | any {|old| $old.name == $row.name and $old.value == $row.value })
+    }
+    | reduce --fold {} {|row, acc| $acc | upsert $row.name $row.value }
+}
+
+def main [
+    file: path  # a file bash can source
+    --names     # print only the variable names, never their values
+] {
+    if not ($file | path exists) {
+        error make {msg: $"no such file: ($file)"}
+    }
+    let variables = (set-by $file)
+    if $names { $variables | columns | str join (char nl) } else { $variables | to json }
+}
