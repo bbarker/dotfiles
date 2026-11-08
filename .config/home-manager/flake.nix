@@ -15,13 +15,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # nixGL for GPU support on non-NixOS systems (Pop!_OS, Ubuntu, etc.)
+    # nixGL overrides nvidia_x11 with `kernel = null`, which nixpkgs 26.05
+    # refuses, so it keeps the last release it builds with; a wrapper that
+    # loads the host's driver needs nothing from our pin.
+    nixpkgs-nixgl.url = "github:nixos/nixpkgs/nixos-25.05";
     nixgl = {
       url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-nixgl";
     };
   };
 
-  outputs = { nixpkgs, home-manager, claude-code,  unison-lang, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, claude-code,  unison-lang, nixgl, nixpkgs-nixgl, ... }:
     let
       system = "SYSTEM_PLACEHOLDER";
       isLinux = builtins.match ".*linux.*" system != null;
@@ -31,7 +35,9 @@
         inherit system;
         overlays = [
           claude-code.overlays.default
-          unison-lang.overlay
+          # Its tree-sitter override passes `extraGrammars`, which nixpkgs 26.05
+          # removed; only unison-ucm is used from it.
+          (final: prev: builtins.removeAttrs (unison-lang.overlay final prev) [ "tree-sitter" ])
           (final: prev: {
             unison-ucm = prev.unison-ucm.overrideAttrs (old: rec {
               version = "1.5.0";
@@ -48,7 +54,15 @@
               };
             });
           })
-        ] ++ (if (isLinux && isImpure) then [ nixgl.overlays.default ] else []);
+        ] ++ (if (isLinux && isImpure) then [
+          (final: prev: {
+            nixgl = import "${nixgl}/default.nix" {
+              pkgs = import nixpkgs-nixgl { inherit system; config.allowUnfree = true; };
+              enable32bits = system == "x86_64-linux";
+              enableIntelX86Extensions = system == "x86_64-linux";
+            };
+          })
+        ] else []);
         config.allowUnfree = true;
       };
     # ai-sh = pkgs.rustPlatform.buildRustPackage rec {

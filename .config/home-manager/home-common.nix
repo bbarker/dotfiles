@@ -32,7 +32,7 @@ in
     tmux
     helix
     bashInteractive
-    pkgsUnstable.nushell # 25.05 ships 0.104, too old for `get -o`
+    pkgsUnstable.nushell # newer than the stable channel's, to match project devShells
 
     # image viewers
     oculante
@@ -44,7 +44,7 @@ in
     bun
 
     git
-    gitAndTools.gh
+    gh
     meld
     openssh
     tig
@@ -115,7 +115,7 @@ in
     #   { path = "~/.gitconfig-WH"; condition = "gitdir:~/WH/"; }
     # ];
 
-    extraConfig = {
+    settings = {
       color = {
         ui = "auto";
       };

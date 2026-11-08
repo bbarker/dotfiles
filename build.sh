@@ -203,7 +203,7 @@ DESIRED_SYSTEM=$(desiredSystem "${OS}" "${ARCH_NAME}")
 sed_i "s/SYSTEM_PLACEHOLDER/${DESIRED_SYSTEM}/g" "${HOME}/.config/home-manager/flake.nix" "${HOME}/.config/home-manager/home-common.nix"
 echo "Substitution complete. The Nix system is now set to ${DESIRED_SYSTEM}."
 
-DESIRED_VERSION="25.05"
+DESIRED_VERSION="26.05"
 sed_i "s/NIX_VERSION_PLACEHOLDER/${DESIRED_VERSION}/g" "${HOME}/.config/home-manager/flake.nix"
 echo "Substitution complete. The Nix version is now set to ${DESIRED_VERSION}."
 
